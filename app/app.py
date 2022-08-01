@@ -20,56 +20,56 @@ def root_route():
     dynamodb.create_table_movie()
     return 'Table created'    
 
-# @app.route('/createUserTable')
-# def route_user():
-#     dynamodb.create_table_user()
-#     return 'Table created'
+@app.route('/createUserTable')
+def route_user():
+    dynamodb.create_table_user()
+    return 'Table created'
 
-# @app.route('/signup', methods=['POST'])
-# def signup():
-#     if request.method == 'POST':
+@app.route('/signup', methods=['POST'])
+def signup():
+    if request.method == 'POST':
 
-#         name     = request.data['name']
-#         username = request.data['username']
-#         email    = request.data['email']
-#         password = request.data['password']
-#         userid = public_id=str(uuid.uuid4())
+        name     = request.data['name']
+        username = request.data['username']
+        email    = request.data['email']
+        password = request.data['password']
+        userid = public_id=str(uuid.uuid4())
 
-#         hashed_password = generate_password_hash(password, method='sha256')
+        hashed_password = generate_password_hash(password, method='sha256')
 
-#         dynamodb.signup(userid, username, name, email, hashed_password)
-#         response  = jsonify({'message' : 'New user created!'}), 201
-#         return response
+        dynamodb.signup(userid, username, name, email, hashed_password)
+        response  = jsonify({'message' : 'New user created!'}), 201
+        return response
     
-# @app.route('/login', methods=['POST'])
-# def login():
+@app.route('/login', methods=['POST'])
+def login():
 
-#     auth = request.authorization 
-#     username = auth.username
-#     password = auth.password
-#     response = None
+    auth = request.authorization 
+    username = auth.username
+    password = auth.password
+    response = None
     
-#     if not username or not password:
+    if not username or not password:
 
-#         response = make_response('Could not verify, Incorrect username or password', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        response = make_response('Could not verify, Incorrect username or password', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
-#     user =  dynamodb.userTable.get_item(
-#         Key = {
-#             'email'     : email
-#         },
-#         AttributesToGet = ['title', 'description', 'author', 'publisher', 'year', 'isbn']
-#     )
+    user =  dynamodb.userTable.get_item(
+        Key = {
+            'email'     : email
+        },
+        AttributesToGet = ['title', 'description', 'author', 'publisher', 'year', 'isbn']
+    )
 
-#     if not user:
-#         app.logger.error('Could not verify')
-#         response = make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+    if not user:
+        app.logger.error('Could not verify')
+        response = make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
-#     if check_password_hash(user.password, password):
-#         token = jwt.encode({'public_id' : user.public_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=120)}, app.config['SECRET_KEY'])
+    if check_password_hash(user.password, password):
+        token = jwt.encode({'public_id' : user.public_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=120)}, app.config['SECRET_KEY'])
 
-#         response = jsonify({'token' : token.decode('UTF-8')})
+        response = jsonify({'token' : token.decode('UTF-8')})
 
-#     return response      
+    return response      
 
 @app.route('/upload', methods=['POST'])
 def file_upload():
