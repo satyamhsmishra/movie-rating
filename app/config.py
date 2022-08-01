@@ -1,0 +1,4 @@
+AWS_ACCESS_KEY_ID = '1221'
+AWS_SECRET_ACCESS_KEY = '1221'
+REGION_NAME = 'us-west-2'
+ENDPOINT_URL = 'http://localhost:8000'
